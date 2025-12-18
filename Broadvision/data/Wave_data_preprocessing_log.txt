@@ -1,0 +1,116 @@
+[2025-12-12 13:50:03] 
+############################################################
+[2025-12-12 13:50:03] # DATA PREPROCESSING PIPELINE INITIATED
+[2025-12-12 13:50:03] ############################################################
+[2025-12-12 13:50:03] 
+Input File: Wave_data.xlsx
+[2025-12-12 13:50:03] Output Folder: data
+[2025-12-12 13:50:03] Initial Records: 492
+[2025-12-12 13:50:03] Initial Columns: 13
+[2025-12-12 13:50:03] 
+============================================================
+STEP 1: MISSING VALUE DETECTION
+============================================================
+[2025-12-12 13:50:03] 
+Missing Values Summary:
+                                                                                                                            Column  Missing_Count  Missing_Percentage
+Total overall IT Costs (Expense + Capex, recurring and one-time)  Total overall IT Costs (Expense + Capex, recurring and one-time)            404               82.11
+Estimated Start Date of IT Work                                                                    Estimated Start Date of IT Work            330               67.07
+Estimated End Date of IT Work                                                                        Estimated End Date of IT Work            330               67.07
+IT implementation complexity                                                                          IT implementation complexity            287               58.33
+IT Project Manager                                                                                              IT Project Manager            286               58.13
+L4 forecast date                                                                                                  L4 forecast date            283               57.52
+Stage                                                                                                                        Stage              0                0.00
+Name                                                                                                                          Name              0                0.00
+#                                                                                                                                #              0                0.00
+Weekly status                                                                                                        Weekly status              0                0.00
+Interdependencies                                                                                                Interdependencies              0                0.00
+Initiative Owner                                                                                                  Initiative Owner              0                0.00
+Accountable Workstream                                                                                      Accountable Workstream              0                0.00
+[2025-12-12 13:50:03] 
+Rows with at least one missing value: 425/492
+[2025-12-12 13:50:03] 
+============================================================
+STEP 2: TYPE INFERENCE
+============================================================
+[2025-12-12 13:50:03] 
+Column Types Inferred:
+                                                              Column Inferred_Type
+0                                                                  #          text
+1                                                               Name          text
+2                                                              Stage          text
+3                                                      Weekly status          text
+4                                                 IT Project Manager          text
+5                                                   Initiative Owner          text
+6                                             Accountable Workstream          text
+7                                                  Interdependencies          text
+8                                       IT implementation complexity          text
+9   Total overall IT Costs (Expense + Capex, recurring and one-time)          text
+10                                   Estimated Start Date of IT Work          date
+11                                     Estimated End Date of IT Work          date
+12                                                  L4 forecast date          date
+[2025-12-12 13:50:03] 
+============================================================
+STEP 3: MISSING VALUE IMPUTATION (REVISED)
+============================================================
+[2025-12-12 13:50:03] 
+Imputation Methods Applied:
+[2025-12-12 13:50:03]   IT Project Manager: Text - Constant: 'Not Specified' (General)
+[2025-12-12 13:50:03]   IT implementation complexity: Text - Constant: 'Not Specified'
+[2025-12-12 13:50:03]   Total overall IT Costs (Expense + Capex, recurring and one-time): Text - Constant: 'Not Specified' (General)
+[2025-12-12 13:50:03]   Estimated Start Date of IT Work: Date - No Imputation (Left as NaN/NaT)
+[2025-12-12 13:50:03]   Estimated End Date of IT Work: Date - No Imputation (Left as NaN/NaT)
+[2025-12-12 13:50:03]   L4 forecast date: Date - No Imputation (Left as NaN/NaT)
+[2025-12-12 13:50:03] 
+Remaining missing values: 943
+[2025-12-12 13:50:03] 
+============================================================
+STEP 4: OUTLIER DETECTION & CAPPING (3-SIGMA)
+============================================================
+[2025-12-12 13:50:03] 
+No significant outliers detected (all values within 3-sigma)
+[2025-12-12 13:50:03] 
+============================================================
+STEP 5: DATE NORMALIZATION
+============================================================
+[2025-12-12 13:50:03] 
+Date columns normalized to YYYY-MM-DD format: 3
+[2025-12-12 13:50:03] 
+============================================================
+STEP 6: TEXT NORMALIZATION
+============================================================
+[2025-12-12 13:50:04] 
+Text columns normalized (trimmed, lowercased): 10
+[2025-12-12 13:50:04] 
+============================================================
+STEP 7: DEDUPLICATION
+============================================================
+[2025-12-12 13:50:04] 
+Duplicate rows removed: 0
+[2025-12-12 13:50:04] Records before: 492, after: 492
+[2025-12-12 13:50:04] 
+============================================================
+STEP 8: DERIVED METRICS
+============================================================
+[2025-12-12 13:50:04] 
+Derived Metrics Created:
+[2025-12-12 13:50:04]   • Duration (days): Estimated Start Date of IT Work to Interdependencies
+[2025-12-12 13:50:04] 
+============================================================
+STEP 9: FINAL DATA QUALITY REPORT
+============================================================
+[2025-12-12 13:50:04] 
+Dataset Dimensions:
+[2025-12-12 13:50:04]   Total Records: 492
+[2025-12-12 13:50:04]   Total Columns: 14
+[2025-12-12 13:50:04]   Records Removed: 0
+[2025-12-12 13:50:04] 
+Column Types:
+[2025-12-12 13:50:04]   Text: 10
+[2025-12-12 13:50:04]   Date: 3
+[2025-12-12 13:50:04] 
+Remaining Missing Values: 1435 (Target: 0)
+[2025-12-12 13:50:04] 
+============================================================
+[2025-12-12 13:50:04] [OK] Cleaned data saved to: data\Wave_data_cleaned.xlsx
+[2025-12-12 13:50:04] ============================================================
