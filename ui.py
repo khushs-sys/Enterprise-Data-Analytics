@@ -9,6 +9,10 @@ NEW FEATURES:
 - Project-Level Persona-Based Insights (NEW)
 - Data Validation & Accuracy Governance (NEW)
 - Enhanced Visualizations
+- Hover Tooltips for Project Details
+- Variance Calculation Explanations
+- Improved Color Schemes
+- Project Dropdown Tables in Insights (NEW)
 """
 
 import streamlit as st
@@ -30,9 +34,13 @@ def load_custom_css():
         .main-header {
             font-size: 2.5rem;
             font-weight: bold;
-            color: #1e3a8a;
+            color: #0f172a;
             margin-bottom: 0.5rem;
             text-align: center;
+            background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         .section-header {
             font-size: 1.8rem;
@@ -40,7 +48,7 @@ def load_custom_css():
             color: #1e40af;
             margin-top: 2rem;
             margin-bottom: 1rem;
-            border-bottom: 3px solid #3b82f6;
+            border-bottom: 3px solid #6366f1;
             padding-bottom: 0.5rem;
         }
         .project-card {
@@ -48,7 +56,7 @@ def load_custom_css():
             padding: 1.5rem;
             border-radius: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-left: 5px solid #3b82f6;
+            border-left: 5px solid #6366f1;
             margin: 1rem 0;
         }
         .status-on-track {
@@ -64,7 +72,7 @@ def load_custom_css():
             font-weight: bold;
         }
         .metric-container {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
             padding: 1.5rem;
             border-radius: 10px;
             color: white;
@@ -73,7 +81,7 @@ def load_custom_css():
         }
         .alert-critical {
             background-color: #fee2e2;
-            border-left: 5px solid #dc2626;
+            border-left: 5px solid #ef4444;
             padding: 1.5rem;
             border-radius: 8px;
             margin: 1rem 0;
@@ -87,13 +95,13 @@ def load_custom_css():
         }
         .alert-info {
             background-color: #dbeafe;
-            border-left: 5px solid #3b82f6;
+            border-left: 5px solid #6366f1;
             padding: 1.5rem;
             border-radius: 8px;
             margin: 1rem 0;
         }
         .insight-box {
-            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
             color: white;
             padding: 2rem;
             border-radius: 10px;
@@ -111,15 +119,15 @@ def load_custom_css():
         }
         .source-smartsheet {
             background-color: #dbeafe;
-            color: #1e40af;
+            color: #0c4a6e;
         }
         .source-wave {
-            background-color: #fef3c7;
-            color: #92400e;
+            background-color: #fef08a;
+            color: #713f12;
         }
         .source-tick {
-            background-color: #d1fae5;
-            color: #065f46;
+            background-color: #dcfce7;
+            color: #15803d;
         }
         .persona-tab {
             background-color: #f3f4f6;
@@ -134,7 +142,7 @@ def load_custom_css():
             font-size: 0.9rem;
             font-weight: 600;
             margin: 0.25rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
             color: white;
         }
         .confidence-badge {
@@ -147,6 +155,19 @@ def load_custom_css():
             background-color: #e0e7ff;
             color: #4338ca;
         }
+        .variance-info {
+            background-color: #f0f9ff;
+            border-left: 4px solid #6366f1;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        .hover-tooltip {
+            cursor: help;
+            border-bottom: 1px dotted #6366f1;
+            text-decoration: underline dotted;
+        }
     </style>
     """, unsafe_allow_html=True)
 
@@ -158,63 +179,73 @@ def create_status_distribution_chart(summary):
     if not status_dist:
         return None
     
+    # Color scheme: Green for good, Amber for warning, Red for bad
     colors = {
-        'On Track': '#10b981',
-        'At Risk': '#f59e0b',
-        'Delayed': '#ef4444',
-        'Unknown': '#6b7280'
+        'On Track': '#10b981',      # Green - Good
+        'At Risk': '#f59e0b',       # Amber - Warning
+        'Delayed': '#ef4444',       # Red - Bad
+        'Unknown': '#9ca3af'        # Gray - Unknown
     }
     
     labels = list(status_dist.keys())
     values = list(status_dist.values())
-    chart_colors = [colors.get(label, '#6b7280') for label in labels]
+    chart_colors = [colors.get(label, '#94a3b8') for label in labels]
     
     fig = go.Figure(data=[go.Pie(
         labels=labels,
         values=values,
         marker=dict(colors=chart_colors),
         textinfo='label+percent',
-        textfont_size=14
+        textfont_size=14,
+        hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
     )])
     
     fig.update_layout(
         title='Portfolio Status Distribution',
-        height=400
+        height=400,
+        font=dict(size=12)
     )
     
     return fig
 
 
 def create_health_distribution_chart(summary):
-    """Create bar chart of health indicators"""
+    """Create bar chart of health indicators with enforced color mapping"""
     health_dist = summary.get('health_distribution', {})
     
     if not health_dist:
         return None
     
     colors_map = {
-        'Green': '#10b981',
-        'Yellow': '#f59e0b',
-        'Red': '#ef4444',
-        'Unknown': '#6b7280'
+        'Green': '#10b981',         # Green - Good
+        'green': '#10b981',         # Green - Good (lowercase)
+        'Yellow': '#f59e0b',        # Amber - Warning
+        'yellow': '#f59e0b',        # Amber - Warning (lowercase)
+        'Red': '#ef4444',           # Red - Bad
+        'red': '#ef4444',           # Red - Bad (lowercase)
+        'Unknown': '#9ca3af',       # Gray - Unknown
+        'unknown': '#9ca3af'        # Gray - Unknown (lowercase)
     }
     
     df = pd.DataFrame(list(health_dist.items()), columns=['Health', 'Count'])
-    df['Color'] = df['Health'].map(colors_map)
+    df['Color'] = df['Health'].apply(lambda x: colors_map.get(x, colors_map.get(x.lower(), '#9ca3af')))
     
     fig = go.Figure(data=[go.Bar(
         x=df['Health'],
         y=df['Count'],
         marker_color=df['Color'],
         text=df['Count'],
-        textposition='outside'
+        textposition='outside',
+        hovertemplate='<b>%{x}</b><br>Projects: %{y}<extra></extra>'
     )])
     
     fig.update_layout(
         title='Health Indicator Distribution',
         xaxis_title='Health Status',
         yaxis_title='Number of Projects',
-        height=400
+        height=400,
+        font=dict(size=12),
+        hovermode='x unified'
     )
     
     return fig
@@ -232,6 +263,7 @@ def create_budget_variance_chart(projects):
         if cost_var is not None:
             data.append({
                 'Project': metadata.get('project_name', project_id),
+                'Project ID': project_id,
                 'Variance %': cost_var
             })
     
@@ -241,25 +273,40 @@ def create_budget_variance_chart(projects):
     df = pd.DataFrame(data)
     df = df.sort_values('Variance %')
     
-    colors = ['#ef4444' if x < -10 else '#10b981' if x > 5 else '#f59e0b' for x in df['Variance %']]
+    # Color scheme: Red for bad (over budget), Green for good (under budget), Amber for moderate
+    colors = []
+    for x in df['Variance %']:
+        if x < -10:
+            colors.append('#ef4444')      # Red - Over budget by more than 10%
+        elif x > 5:
+            colors.append('#10b981')      # Green - Under budget by more than 5%
+        else:
+            colors.append('#f59e0b')      # Amber - Within ±5%
     
     fig = go.Figure(data=[go.Bar(
         x=df['Project'],
         y=df['Variance %'],
         marker_color=colors,
         text=df['Variance %'].apply(lambda x: f"{x:.1f}%"),
-        textposition='outside'
+        textposition='outside',
+        customdata=df['Project ID'],
+        hovertemplate='<b>%{customdata}</b><br>' +
+                      'Project: %{x}<br>' +
+                      'Variance: %{y:.1f}%<br>' +
+                      '<i>Calculation: ((Actual Cost - Baseline) / Baseline) × 100</i><extra></extra>'
     )])
     
     fig.update_layout(
-        title='Budget Variance by Project',
+        title='Budget Variance by Project<br><sub>Negative = Over Budget | Positive = Under Budget</sub>',
         xaxis_title='Projects',
         yaxis_title='Variance % (negative = overrun)',
         height=500,
-        xaxis={'tickangle': -45}
+        xaxis={'tickangle': -45},
+        font=dict(size=11),
+        hovermode='x unified'
     )
     
-    fig.add_hline(y=0, line_dash="dash", line_color="gray")
+    fig.add_hline(y=0, line_dash="dash", line_color="gray", annotation_text="Break Even")
     
     return fig
 
@@ -276,6 +323,7 @@ def create_schedule_variance_chart(projects):
         if schedule_var is not None:
             data.append({
                 'Project': metadata.get('project_name', project_id),
+                'Project ID': project_id,
                 'Delay (Days)': schedule_var
             })
     
@@ -285,25 +333,40 @@ def create_schedule_variance_chart(projects):
     df = pd.DataFrame(data)
     df = df.sort_values('Delay (Days)', ascending=False)
     
-    colors = ['#ef4444' if x > 30 else '#10b981' if x <= 0 else '#f59e0b' for x in df['Delay (Days)']]
+    # Color scheme: Red for bad (delayed), Green for good (on time), Amber for moderate
+    colors = []
+    for x in df['Delay (Days)']:
+        if x > 30:
+            colors.append('#ef4444')      # Red - More than 30 days delayed
+        elif x <= 0:
+            colors.append('#10b981')      # Green - On time or ahead
+        else:
+            colors.append('#f59e0b')      # Amber - 1-30 days delayed
     
     fig = go.Figure(data=[go.Bar(
         x=df['Project'],
         y=df['Delay (Days)'],
         marker_color=colors,
         text=df['Delay (Days)'].apply(lambda x: f"{x:.0f}d"),
-        textposition='outside'
+        textposition='outside',
+        customdata=df['Project ID'],
+        hovertemplate='<b>%{customdata}</b><br>' +
+                      'Project: %{x}<br>' +
+                      'Schedule Variance: %{y:.0f} days<br>' +
+                      '<i>Calculation: Actual End Date - Baseline End Date</i><extra></extra>'
     )])
     
     fig.update_layout(
-        title='Schedule Variance by Project',
+        title='Schedule Variance by Project<br><sub>Positive = Delayed | Negative = Ahead of Schedule</sub>',
         xaxis_title='Projects',
         yaxis_title='Days (positive = delayed)',
         height=500,
-        xaxis={'tickangle': -45}
+        xaxis={'tickangle': -45},
+        font=dict(size=11),
+        hovermode='x unified'
     )
     
-    fig.add_hline(y=0, line_dash="dash", line_color="gray")
+    fig.add_hline(y=0, line_dash="dash", line_color="gray", annotation_text="On Time")
     
     return fig
 
@@ -321,6 +384,7 @@ def create_data_completeness_chart(summary):
         completeness.get('partial_data', 0),
         completeness.get('minimal_data', 0)
     ]
+    # Green for complete, Amber for partial, Red for minimal
     colors = ['#10b981', '#f59e0b', '#ef4444']
     
     fig = go.Figure(data=[go.Bar(
@@ -328,14 +392,17 @@ def create_data_completeness_chart(summary):
         y=values,
         marker_color=colors,
         text=values,
-        textposition='outside'
+        textposition='outside',
+        hovertemplate='<b>%{x}</b><br>Projects: %{y}<extra></extra>'
     )])
     
     fig.update_layout(
         title='Data Source Completeness',
         xaxis_title='Coverage Level',
         yaxis_title='Number of Projects',
-        height=400
+        height=400,
+        font=dict(size=12),
+        hovermode='x unified'
     )
     
     return fig
@@ -373,10 +440,19 @@ def create_portfolio_metrics_summary(summary):
                 f"{variance_pct:.1f}%",
                 delta=f"{'Over' if variance_pct < 0 else 'Under'} Budget"
             )
+    
+    # Add variance explanation
+    st.markdown("""
+    <div class="variance-info">
+        <b>📊 Variance Calculation:</b><br/>
+        Portfolio Variance = ((Total Actual Cost - Total Baseline Budget) / Total Baseline Budget) × 100<br/>
+        <b>Interpretation:</b> Negative % = Over Budget | Positive % = Under Budget
+    </div>
+    """, unsafe_allow_html=True)
 
 
-def display_insight_card(insight: dict):
-    """Display a single insight card with appropriate styling"""
+def display_insight_card(insight: dict, projects_map: dict = None):
+    """Display a single insight card with appropriate styling and detailed project breakdown in expandable tables"""
     severity = insight.get('severity', 'info')
     confidence = insight.get('confidence', 'Unknown')
     
@@ -397,9 +473,15 @@ def display_insight_card(insight: dict):
     alert_class = severity_colors.get(severity, 'alert-info')
     icon = severity_icons.get(severity, 'ℹ️')
     
+    title = insight['title']
+    metrics = insight.get('metrics', {})
+    
+    # Enhanced header with gradient background
+    header_html = f'<div style="background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%); padding: 1.5rem; border-radius: 10px; color: white; margin: 0.5rem 0;"><h4 style="margin: 0; color: white;">{icon} {title}</h4></div>'
+    st.markdown(header_html, unsafe_allow_html=True)
+    
     st.markdown(f"""
     <div class="{alert_class}">
-        <h4>{icon} {insight['title']}</h4>
         <p><strong>Category:</strong> <span class="insight-category-badge">{insight['category'].replace('_', ' ').title()}</span></p>
         <p><strong>Confidence:</strong> <span class="confidence-badge">{confidence}</span></p>
         <p><strong>Description:</strong> {insight['description']}</p>
@@ -408,9 +490,62 @@ def display_insight_card(insight: dict):
     </div>
     """, unsafe_allow_html=True)
     
-    if insight.get('metrics'):
+    # Display detailed project breakdown if metrics contains project information
+    if isinstance(metrics, dict) and projects_map:
+        # Dictionary of all possible project list keys and their display labels
+        project_keys = {
+            'flagged_projects': '🚩 Flagged Projects',
+            'leakage_projects': '💧 Leakage Projects',
+            'on_track_projects': '✅ On Track',
+            'at_risk_projects': '⚠️ At Risk',
+            'delayed_projects': '🔴 Delayed',
+            'green_projects': '✅ Healthy',
+            'yellow_projects': '⚠️ Warning',
+            'red_projects': '🔴 Critical',
+            'affected_projects': '📋 Affected',
+            'uncovered_initiatives': '❌ Uncovered',
+            'worst_offenders': '⚠️ Worst Offenders',
+            'overloaded_managers': '👤 Overloaded Managers',
+            'projects': '📋 Projects',
+            'project_ids': '📋 Projects',
+            'top_contributors': '📊 Top Contributors',
+        }
+        
+        # Track if we found any projects
+        found_projects = False
+        
+        # Iterate through all possible project keys
+        for key, label in project_keys.items():
+            if key in metrics and metrics[key]:
+                found_projects = True
+                projects_list = metrics[key]
+                
+                # Handle different data types
+                if isinstance(projects_list, list):
+                    # Check if it's a list of dicts or list of strings
+                    if projects_list and isinstance(projects_list[0], dict):
+                        # List of dictionaries (with project_id key)
+                        project_ids = [item.get('project_id', item.get('Project ID', item)) for item in projects_list]
+                    else:
+                        # List of strings/IDs
+                        project_ids = projects_list
+                    
+                    with st.expander(f"{label} ({len(project_ids)} projects)"):
+                        df_projects = pd.DataFrame([
+                            {
+                                'Project ID': pid,
+                                'Project Name': projects_map.get(pid, 'Unknown') if isinstance(pid, str) else str(pid)
+                            }
+                            for pid in project_ids if pid
+                        ])
+                        if not df_projects.empty:
+                            st.dataframe(df_projects, use_container_width=True, hide_index=True)
+                        else:
+                            st.info("No projects found")
+    
+    if metrics:
         with st.expander("📊 Supporting Metrics"):
-            st.json(insight['metrics'])
+            st.json(metrics)
 
 
 def display_project_assessment(project_data):
@@ -564,7 +699,8 @@ def main():
     
     load_custom_css()
     
-    st.markdown('<p class="main-header">📊 Enterprise Portfolio Analytics</p>', unsafe_allow_html=True)
+    # Updated main header with better styling
+    st.markdown('<p class="main-header">Enterprise Data Analytics Dashboard</p>', unsafe_allow_html=True)
     st.markdown("**AI-Powered Multi-Source Project Analysis: Smartsheet + Wave + Tick**")
     st.markdown("---")
     
@@ -696,6 +832,12 @@ def main():
         projects = st.session_state['projects']
         engine = st.session_state['engine']
         
+        # Create project name mapping for tooltips
+        projects_map = {}
+        for project_id, project_data in projects.items():
+            metadata = project_data.get('project_metadata', {})
+            projects_map[project_id] = metadata.get('project_name', 'Unknown')
+        
         st.markdown('<p class="section-header">👤 Select Your Persona</p>', unsafe_allow_html=True)
         
         persona = st.radio(
@@ -754,7 +896,7 @@ def main():
             st.markdown(f"**Showing {len(filtered_insights)} insights**")
             
             for insight in filtered_insights:
-                display_insight_card(insight)
+                display_insight_card(insight, projects_map)
         else:
             st.info("No insights generated yet. Complete the analysis to see insights.")
         
@@ -869,7 +1011,7 @@ def main():
                 st.markdown(f"**Showing {len(project_insights)} project-level insights**")
                 
                 for insight in project_insights:
-                    display_insight_card(insight)
+                    display_insight_card(insight, projects_map)
             else:
                 st.info("No project-specific insights for this persona.")
         
