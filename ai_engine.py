@@ -1235,7 +1235,7 @@ class PortfolioAIEngine:
                         'leakage_effort': leakage_effort,
                         'total_effort': total_effort,
                         'leakage_project_count': len(leakage_projects),
-                        'top_contributors': leakage_projects[:5]
+                        'top_contributors': leakage_projects
                     },
                     'formula_used': 'Value Leakage % = (Effort on no-value/stalled projects) / Total Effort',
                     'data_sources_used': list(data_sources_available),
@@ -1302,7 +1302,7 @@ class PortfolioAIEngine:
                         'coverage_pct': coverage_pct,
                         'covered_count': covered_initiatives,
                         'total_count': total_wave_initiatives,
-                        'uncovered_initiatives': uncovered_initiatives[:10]
+                        'uncovered_initiatives': uncovered_initiatives
                     },
                     'formula_used': 'Coverage % = Initiatives with (Smartsheet AND Tick) / Total Wave initiatives',
                     'data_sources_used': list(data_sources_available),
@@ -1321,7 +1321,7 @@ class PortfolioAIEngine:
                         'coverage_pct': coverage_pct,
                         'covered_count': covered_initiatives,
                         'total_count': total_wave_initiatives,
-                        'uncovered_initiatives': uncovered_initiatives[:5]
+                        'uncovered_initiatives': uncovered_initiatives
                     },
                     'formula_used': 'Coverage % = Initiatives with (Smartsheet AND Tick) / Total Wave initiatives',
                     'data_sources_used': list(data_sources_available),
@@ -1454,7 +1454,7 @@ class PortfolioAIEngine:
                 'recommendation': 'Implement recovery plans or adjust expectations immediately',
                 'metrics': {
                     'at_risk_count': len(at_risk_projects),
-                    'at_risk_projects': at_risk_projects[:10]
+                    'at_risk_projects': at_risk_projects
                 },
                 'formula_used': 'Risk Score = Low velocity + High burn + Slippage (binary: Likely to Miss)',
                 'data_sources_used': ['tick', 'smartsheet', 'wave'],
@@ -1504,7 +1504,7 @@ class PortfolioAIEngine:
                 'recommendation': 'Rebalance investment toward highest-value levers',
                 'metrics': {
                     'value_lever_count': len(value_lever_costs),
-                    'top_investments': [{'lever': k, 'cost': v['cost'], 'project_count': len(v['projects'])} for k, v in sorted_levers[:5]]
+                    'top_investments': [{'lever': k, 'cost': v['cost'], 'project_count': len(v['projects'])} for k, v in sorted_levers]
                 },
                 'formula_used': 'Cost per Value Lever = Total Tick cost / Value Lever',
                 'data_sources_used': ['tick', 'wave'],
@@ -1554,7 +1554,7 @@ class PortfolioAIEngine:
                 'metrics': {
                     'avg_drag_days': avg_drag,
                     'affected_projects': len(drag_projects),
-                    'worst_offenders': sorted(drag_projects, key=lambda x: x['drag_days'], reverse=True)[:5]
+                    'worst_offenders': sorted(drag_projects, key=lambda x: x['drag_days'], reverse=True)
                 },
                 'formula_used': 'Drag Days = Task Start Date - Approval Date',
                 'data_sources_used': ['smartsheet', 'wave'],
@@ -1615,7 +1615,7 @@ class PortfolioAIEngine:
                     'recommendation': 'Review value proposition or reduce investment',
                     'metrics': {
                         'over_invested_count': len(over_invested),
-                        'projects': over_invested[:5]
+                        'projects': over_invested
                     },
                     'formula_used': 'Over-invested = High effort + No value lever',
                     'data_sources_used': ['tick', 'wave'],
@@ -1633,7 +1633,7 @@ class PortfolioAIEngine:
                     'recommendation': '⚡ ACCELERATE: Consider increasing investment',
                     'metrics': {
                         'under_invested_count': len(under_invested),
-                        'projects': under_invested[:5]
+                        'projects': under_invested
                     },
                     'formula_used': 'Under-invested = Low effort + Has value lever',
                     'data_sources_used': ['tick', 'wave'],
@@ -1677,7 +1677,7 @@ class PortfolioAIEngine:
                 'recommendation': 'Validate dependency status and execution progress',
                 'metrics': {
                     'at_risk_count': len(at_risk_projects),
-                    'projects': at_risk_projects[:10]
+                    'projects': at_risk_projects
                 },
                 'formula_used': 'Green status AND (No Tick effort OR Has dependencies)',
                 'data_sources_used': ['smartsheet', 'tick'],
@@ -1733,7 +1733,7 @@ class PortfolioAIEngine:
                 'recommendation': 'Reconcile completion % with actual work performed',
                 'metrics': {
                     'mismatch_count': len(mismatch_projects),
-                    'projects': mismatch_projects[:10]
+                    'projects': mismatch_projects
                 },
                 'formula_used': 'Actual hours > 50% planned AND Completion < 40%',
                 'data_sources_used': ['tick', 'smartsheet'],
@@ -1889,7 +1889,7 @@ class PortfolioAIEngine:
                 'recommendation': 'Review team health, scope, and consider resource rotation',
                 'metrics': {
                     'at_risk_count': len(burnout_risk_projects),
-                    'projects': burnout_risk_projects[:5]
+                    'projects': burnout_risk_projects
                 },
                 'formula_used': 'Sustained effort (>200 hrs/person) + Low progress (<50%)',
                 'data_sources_used': ['tick', 'smartsheet'],
@@ -1944,7 +1944,7 @@ class PortfolioAIEngine:
                 'metrics': {
                     'phantom_hours': phantom_hours,
                     'phantom_project_count': len(phantom_projects),
-                    'projects': phantom_projects[:10]
+                    'projects': phantom_projects
                 },
                 'formula_used': 'Tick hours AND (No Smartsheet task AND No Wave mapping)',
                 'data_sources_used': ['tick'],
@@ -2056,7 +2056,7 @@ class PortfolioAIEngine:
                 'metrics': {
                     'low_util_count': len(low_utilization_resources),
                     'total_idle_hours': total_idle_hours,
-                    'resources': low_utilization_resources[:10]
+                    'resources': low_utilization_resources
                 },
                 'formula_used': 'Resources with <100 hours logged',
                 'data_sources_used': ['tick'],
