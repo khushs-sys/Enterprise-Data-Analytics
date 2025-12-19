@@ -31,146 +31,521 @@ def load_custom_css():
     """Apply custom CSS styling for enterprise dashboard"""
     st.markdown("""
     <style>
+        /* ==================== FORCE LIGHT MODE ==================== */
+        :root {
+            color-scheme: light !important;
+        }
+        
+        html, body {
+            background-color: #f5f7fa !important;
+            color: #1a202c !important;
+        }
+        
+        /* ==================== GLOBAL ELEMENTS ==================== */
+        * {
+            color: #1a202c !important;
+            border-color: #e2e8f0 !important;
+        }
+        
+        /* ==================== STREAMLIT APP ==================== */
+        .stApp, 
+        [data-testid="stAppViewContainer"], 
+        [data-testid="stHeader"],
+        [data-testid="stToolbar"] {
+            background-color: #f5f7fa !important;
+            background: linear-gradient(135deg, #f5f7fa 0%, #f0f4f8 100%) !important;
+        }
+        
+        [data-testid="stSidebar"],
+        [data-testid="stSidebarContent"] {
+            background-color: #ffffff !important;
+            border-right: 1px solid #e2e8f0 !important;
+        }
+        
+        /* ==================== TEXT ELEMENTS ==================== */
+        p, span, div, label, h1, h2, h3, h4, h5, h6 {
+            color: #1a202c !important;
+        }
+        
+        h1, h2, h3 {
+            font-weight: 700 !important;
+            letter-spacing: -0.5px !important;
+        }
+        
+        h4, h5, h6 {
+            font-weight: 600 !important;
+        }
+        
+        /* ==================== MAIN HEADER (GRADIENT) ==================== */
         .main-header {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #0f172a;
-            margin-bottom: 0.5rem;
-            text-align: center;
-            background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 2.8rem !important;
+            font-weight: 800 !important;
+            margin-bottom: 1.5rem !important;
+            text-align: center !important;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+            letter-spacing: -1px !important;
         }
+        
+        /* ==================== SECTION HEADERS ==================== */
         .section-header {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #1e40af;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            border-bottom: 3px solid #6366f1;
-            padding-bottom: 0.5rem;
+            font-size: 1.75rem !important;
+            font-weight: 700 !important;
+            color: #1e293b !important;
+            margin-top: 2.5rem !important;
+            margin-bottom: 1.5rem !important;
+            padding-bottom: 1rem !important;
+            border-bottom: 3px solid !important;
+            border-image: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%) 1 !important;
+            position: relative !important;
         }
-        .project-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-left: 5px solid #6366f1;
-            margin: 1rem 0;
+        
+        /* ==================== INPUT FIELDS ==================== */
+        .stTextInput > div > div > input,
+        .stNumberInput > div > div > input,
+        .stDateInput > div > div > input,
+        .stTimeInput > div > div > input,
+        .stSelectbox [data-baseweb="select"],
+        .stMultiSelect [data-baseweb="select"] {
+            background-color: #ffffff !important;
+            color: #1a202c !important;
+            border: 2px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            padding: 10px 12px !important;
+            font-size: 14px !important;
+            transition: all 0.3s ease !important;
         }
-        .status-on-track {
-            color: #10b981;
-            font-weight: bold;
+        
+        .stTextInput > div > div > input:hover,
+        .stNumberInput > div > div > input:hover,
+        .stSelectbox [data-baseweb="select"]:hover,
+        .stMultiSelect [data-baseweb="select"]:hover {
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1) !important;
         }
-        .status-at-risk {
-            color: #f59e0b;
-            font-weight: bold;
+        
+        .stTextInput > div > div > input:focus,
+        .stNumberInput > div > div > input:focus,
+        .stSelectbox [data-baseweb="select"]:focus,
+        .stMultiSelect [data-baseweb="select"]:focus {
+            border-color: #6366f1 !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15) !important;
         }
-        .status-delayed {
-            color: #ef4444;
-            font-weight: bold;
+        
+        /* ==================== BUTTONS ==================== */
+        .stButton > button,
+        .stDownloadButton > button,
+        button[kind="secondary"] {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 8px !important;
+            padding: 10px 24px !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            cursor: pointer !important;
+            transition: all 0.3s ease !important;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
         }
-        .metric-container {
-            background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
-            padding: 1.5rem;
-            border-radius: 10px;
-            color: white;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        
+        .stButton > button:hover,
+        .stDownloadButton > button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4) !important;
         }
-        .alert-critical {
-            background-color: #fee2e2;
-            border-left: 5px solid #ef4444;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 1rem 0;
+        
+        .stButton > button:active,
+        .stDownloadButton > button:active {
+            transform: translateY(0) !important;
         }
-        .alert-warning {
-            background-color: #fef3c7;
-            border-left: 5px solid #f59e0b;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 1rem 0;
+        
+        /* ==================== FILE UPLOADER ==================== */
+        [data-testid="stFileUploader"],
+        [data-testid="stFileUploadDropzone"] {
+            background-color: #ffffff !important;
         }
-        .alert-info {
-            background-color: #dbeafe;
-            border-left: 5px solid #6366f1;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin: 1rem 0;
+        
+        [data-testid="stFileUploader"] section {
+            background-color: #f8f9fa !important;
+            border: 2px dashed #cbd5e1 !important;
+            border-radius: 12px !important;
+            padding: 30px !important;
+            transition: all 0.3s ease !important;
         }
+        
+        [data-testid="stFileUploader"] section:hover {
+            border-color: #6366f1 !important;
+            background-color: #f3f4f6 !important;
+        }
+        
+        [data-testid="stFileUploader"] button {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+            color: #ffffff !important;
+            border: none !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+        }
+        
+        [data-testid="stFileUploader"] small {
+            color: #64748b !important;
+        }
+        
+        /* ==================== SELECTBOX & DROPDOWNS - FIXED ==================== */
+        .stSelectbox,
+        .stMultiSelect {
+            color: #1a202c !important;
+        }
+        
+        /* Selectbox main container */
+        [data-baseweb="select"] > div {
+            background-color: #ffffff !important;
+            color: #1a202c !important;
+            border-radius: 8px !important;
+            border: 2px solid #e2e8f0 !important;
+        }
+        
+        /* CRITICAL FIX: Dropdown menu (the list that opens) */
+        [data-baseweb="popover"],
+        [data-baseweb="menu"],
+        [role="listbox"] {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            border: 2px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+        
+        /* Dropdown menu items */
+        [data-baseweb="menu"] ul,
+        [role="listbox"] ul {
+            background-color: #ffffff !important;
+        }
+        
+        /* Individual dropdown options */
+        [data-baseweb="menu"] li,
+        [role="option"] {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            padding: 10px 16px !important;
+        }
+        
+        /* Dropdown option hover state */
+        [data-baseweb="menu"] li:hover,
+        [role="option"]:hover,
+        [aria-selected="true"] {
+            background-color: #f3f4f6 !important;
+            color: #000000 !important;
+        }
+        
+        /* Selected value text in closed dropdown */
+        [data-baseweb="select"] [role="button"] {
+            color: #000000 !important;
+        }
+        
+        /* Dropdown arrow icon */
+        [data-baseweb="select"] svg {
+            color: #000000 !important;
+            fill: #000000 !important;
+        }
+        
+        /* ==================== RADIO BUTTONS & CHECKBOXES ==================== */
+        .stRadio > label,
+        .stCheckbox > label {
+            color: #1a202c !important;
+            font-weight: 500 !important;
+        }
+        
+        .stRadio [type="radio"],
+        .stCheckbox [type="checkbox"] {
+            accent-color: #6366f1 !important;
+        }
+        
+        /* ==================== TAGS/CHIPS (MULTISELECT) ==================== */
+        .stMultiSelect [data-baseweb="tag"] {
+            background-color: #e0e7ff !important;
+            color: #3730a3 !important;
+            border-radius: 6px !important;
+            font-weight: 600 !important;
+        }
+        
+        /* ==================== EXPANDER ==================== */
+        .streamlit-expanderHeader,
+        [data-testid="stExpanderDetails"] {
+            background-color: #f8f9fa !important;
+            color: #1a202c !important;
+            border-radius: 8px !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+        
+        .streamlit-expanderHeader:hover {
+            background-color: #f3f4f6 !important;
+            border-color: #cbd5e1 !important;
+        }
+        
+        /* ==================== DATAFRAMES & TABLES - SIMPLE WHITE & BLACK ==================== */
+        
+        [data-testid="stDataFrame"] {
+            background: #ffffff !important;
+        }
+        
+        [data-testid="stDataFrame"] thead {
+            background: #ffffff !important;
+        }
+        
+        [data-testid="stDataFrame"] thead th {
+            background: #f5f5f5 !important;
+            color: #000000 !important;
+        }
+        
+        [data-testid="stDataFrame"] tbody {
+            background: #ffffff !important;
+        }
+        
+        [data-testid="stDataFrame"] td {
+            background: #ffffff !important;
+            color: #000000 !important;
+        }
+        
+        [data-testid="stDataFrame"] th {
+            color: #000000 !important;
+        }
+        
+        /* ==================== METRIC IMPROVEMENTS ==================== */
+        [data-testid="stMetric"] {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 20px !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        [data-testid="stMetric"]:hover {
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1) !important;
+        }
+        
+        /* ==================== METRICS ==================== */
+        [data-testid="stMetricValue"] {
+            color: #1a202c !important;
+            font-size: 2.5rem !important;
+            font-weight: 800 !important;
+        }
+        
+        [data-testid="stMetricLabel"] {
+            color: #64748b !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+        }
+        
+        [data-testid="stMetricDelta"] {
+            color: #059669 !important;
+            font-weight: 700 !important;
+        }
+        
+        /* ==================== TABS ==================== */
+        .stTabs [data-baseweb="tab-list"] {
+            background-color: #ffffff !important;
+            border-bottom: 2px solid #e2e8f0 !important;
+        }
+        
+        .stTabs [data-baseweb="tab"] {
+            color: #64748b !important;
+            font-weight: 600 !important;
+            border-bottom: 3px solid transparent !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .stTabs [data-baseweb="tab"][aria-selected="true"] {
+            color: #6366f1 !important;
+            border-bottom-color: #6366f1 !important;
+        }
+        
+        .stTabs [data-baseweb="tab"]:hover {
+            color: #1a202c !important;
+        }
+        
+        /* ==================== ALERTS & NOTIFICATIONS ==================== */
+        .stAlert,
+        [data-testid="stAlert"] {
+            background-color: #f8f9fa !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 8px !important;
+            padding: 16px !important;
+            color: #1a202c !important;
+            border-left: 4px solid #6366f1 !important;
+        }
+        
+        /* ==================== CARDS & CONTAINERS ==================== */
+        .card-container {
+            background-color: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 20px !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .card-container:hover {
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+        }
+        
+        /* ==================== SCROLLBARS ==================== */
+        ::-webkit-scrollbar {
+            width: 8px !important;
+            height: 8px !important;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f5f7fa !important;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1 !important;
+            border-radius: 4px !important;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8 !important;
+        }
+        
+        /* ==================== INSIGHT BOXES ==================== */
         .insight-box {
-            background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            font-size: 1.05rem;
-            line-height: 1.8;
-            margin: 1.5rem 0;
+            background: linear-gradient(135deg, #f3f4f6 0%, #f8f9fa 100%) !important;
+            border: 2px solid #e2e8f0 !important;
+            border-radius: 12px !important;
+            padding: 20px !important;
+            margin-bottom: 16px !important;
+            transition: all 0.3s ease !important;
         }
-        .data-source-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin: 0.25rem;
+        
+        .insight-box:hover {
+            border-color: #6366f1 !important;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15) !important;
         }
-        .source-smartsheet {
-            background-color: #dbeafe;
-            color: #0c4a6e;
+        
+        .insight-critical {
+            border-left: 5px solid #dc2626 !important;
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
         }
-        .source-wave {
-            background-color: #fef08a;
-            color: #713f12;
+        
+        .insight-high {
+            border-left: 5px solid #ea580c !important;
+            background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%) !important;
         }
-        .source-tick {
-            background-color: #dcfce7;
-            color: #15803d;
+        
+        .insight-warning {
+            border-left: 5px solid #eab308 !important;
+            background: linear-gradient(135deg, #fefce8 0%, #fef08a 100%) !important;
         }
-        .persona-tab {
-            background-color: #f3f4f6;
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 0.5rem 0;
+        
+        /* ==================== BADGES ==================== */
+        .badge {
+            display: inline-block !important;
+            padding: 4px 12px !important;
+            border-radius: 20px !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
         }
-        .insight-category-badge {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin: 0.25rem;
-            background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
-            color: white;
+        
+        .badge-critical {
+            background-color: #fecaca !important;
+            color: #7f1d1d !important;
         }
-        .confidence-badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin: 0.25rem;
-            background-color: #e0e7ff;
-            color: #4338ca;
+        
+        .badge-high {
+            background-color: #fed7aa !important;
+            color: #92400e !important;
         }
-        .variance-info {
-            background-color: #f0f9ff;
-            border-left: 4px solid #6366f1;
-            padding: 1rem;
-            border-radius: 6px;
-            margin: 1rem 0;
-            font-size: 0.9rem;
+        
+        .badge-warning {
+            background-color: #fef08a !important;
+            color: #713f12 !important;
         }
-        .hover-tooltip {
-            cursor: help;
-            border-bottom: 1px dotted #6366f1;
-            text-decoration: underline dotted;
+        
+        .badge-success {
+            background-color: #bbf7d0 !important;
+            color: #065f46 !important;
+        }
+        
+        .badge-info {
+            background-color: #bfdbfe !important;
+            color: #1e3a8a !important;
+        }
+        
+        /* ==================== ALERT BOXES (for insight cards) ==================== */
+        .alert-critical {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%) !important;
+            border: 1px solid #fecaca !important;
+            border-left: 4px solid #dc2626 !important;
+            border-radius: 8px !important;
+            padding: 12px 16px !important;
+            margin: 8px 0 !important;
+            color: #7f1d1d !important;
+        }
+        
+        .alert-warning {
+            background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%) !important;
+            border: 1px solid #fed7aa !important;
+            border-left: 4px solid #ea580c !important;
+            border-radius: 8px !important;
+            padding: 12px 16px !important;
+            margin: 8px 0 !important;
+            color: #92400e !important;
+        }
+        
+        .alert-info {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+            border: 1px solid #bae6fd !important;
+            border-left: 4px solid #0284c7 !important;
+            border-radius: 8px !important;
+            padding: 12px 16px !important;
+            margin: 8px 0 !important;
+            color: #0c4a6e !important;
+        }
+        
+        /* ==================== PLOTLY CHARTS FIX ==================== */
+        .plotly-graph-div {
+            background-color: #ffffff !important;
+        }
+        
+        .plotly-graph-div svg {
+            background-color: #ffffff !important;
+        }
+        
+        /* ==================== LINKS ==================== */
+        a {
+            color: #6366f1 !important;
+            text-decoration: none !important;
+            transition: color 0.3s ease !important;
+        }
+        
+        a:hover {
+            color: #8b5cf6 !important;
+            text-decoration: underline !important;
+        }
+        
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .main-header {
+                font-size: 2rem !important;
+            }
+            
+            .section-header {
+                font-size: 1.5rem !important;
+            }
+            
+            .stButton > button,
+            .stDownloadButton > button {
+                padding: 8px 16px !important;
+                font-size: 13px !important;
+            }
         }
     </style>
     """, unsafe_allow_html=True)
-
 
 def create_status_distribution_chart(summary):
     """Create pie chart of project status distribution"""
@@ -179,12 +554,11 @@ def create_status_distribution_chart(summary):
     if not status_dist:
         return None
     
-    # Color scheme: Green for good, Amber for warning, Red for bad
     colors = {
-        'On Track': '#10b981',      # Green - Good
-        'At Risk': '#f59e0b',       # Amber - Warning
-        'Delayed': '#ef4444',       # Red - Bad
-        'Unknown': '#9ca3af'        # Gray - Unknown
+        'On Track': '#10b981',
+        'At Risk': '#f59e0b',
+        'Delayed': '#ef4444',
+        'Unknown': '#9ca3af'
     }
     
     labels = list(status_dist.keys())
@@ -203,7 +577,9 @@ def create_status_distribution_chart(summary):
     fig.update_layout(
         title='Portfolio Status Distribution',
         height=400,
-        font=dict(size=12)
+        plot_bgcolor='#ffffff',
+        paper_bgcolor='#ffffff',
+        font=dict(color='#1a202c', size=12)
     )
     
     return fig
@@ -217,14 +593,14 @@ def create_health_distribution_chart(summary):
         return None
     
     colors_map = {
-        'Green': '#10b981',         # Green - Good
-        'green': '#10b981',         # Green - Good (lowercase)
-        'Yellow': '#f59e0b',        # Amber - Warning
-        'yellow': '#f59e0b',        # Amber - Warning (lowercase)
-        'Red': '#ef4444',           # Red - Bad
-        'red': '#ef4444',           # Red - Bad (lowercase)
-        'Unknown': '#9ca3af',       # Gray - Unknown
-        'unknown': '#9ca3af'        # Gray - Unknown (lowercase)
+        'Green': '#10b981',
+        'green': '#10b981',
+        'Yellow': '#f59e0b',
+        'yellow': '#f59e0b',
+        'Red': '#ef4444',
+        'red': '#ef4444',
+        'Unknown': '#9ca3af',
+        'unknown': '#9ca3af'
     }
     
     df = pd.DataFrame(list(health_dist.items()), columns=['Health', 'Count'])
@@ -244,8 +620,10 @@ def create_health_distribution_chart(summary):
         xaxis_title='Health Status',
         yaxis_title='Number of Projects',
         height=400,
-        font=dict(size=12),
-        hovermode='x unified'
+        hovermode='x unified',
+        plot_bgcolor='#ffffff',
+        paper_bgcolor='#ffffff',
+        font=dict(color='#1a202c', size=12)
     )
     
     return fig
@@ -273,15 +651,14 @@ def create_budget_variance_chart(projects):
     df = pd.DataFrame(data)
     df = df.sort_values('Variance %')
     
-    # Color scheme: Red for bad (over budget), Green for good (under budget), Amber for moderate
     colors = []
     for x in df['Variance %']:
         if x < -10:
-            colors.append('#ef4444')      # Red - Over budget by more than 10%
+            colors.append('#ef4444')
         elif x > 5:
-            colors.append('#10b981')      # Green - Under budget by more than 5%
+            colors.append('#10b981')
         else:
-            colors.append('#f59e0b')      # Amber - Within ±5%
+            colors.append('#f59e0b')
     
     fig = go.Figure(data=[go.Bar(
         x=df['Project'],
@@ -302,8 +679,10 @@ def create_budget_variance_chart(projects):
         yaxis_title='Variance % (negative = overrun)',
         height=500,
         xaxis={'tickangle': -45},
-        font=dict(size=11),
-        hovermode='x unified'
+        hovermode='x unified',
+        plot_bgcolor='#ffffff',
+        paper_bgcolor='#ffffff',
+        font=dict(color='#1a202c', size=11)
     )
     
     fig.add_hline(y=0, line_dash="dash", line_color="gray", annotation_text="Break Even")
@@ -333,15 +712,14 @@ def create_schedule_variance_chart(projects):
     df = pd.DataFrame(data)
     df = df.sort_values('Delay (Days)', ascending=False)
     
-    # Color scheme: Red for bad (delayed), Green for good (on time), Amber for moderate
     colors = []
     for x in df['Delay (Days)']:
         if x > 30:
-            colors.append('#ef4444')      # Red - More than 30 days delayed
+            colors.append('#ef4444')
         elif x <= 0:
-            colors.append('#10b981')      # Green - On time or ahead
+            colors.append('#10b981')
         else:
-            colors.append('#f59e0b')      # Amber - 1-30 days delayed
+            colors.append('#f59e0b')
     
     fig = go.Figure(data=[go.Bar(
         x=df['Project'],
@@ -362,8 +740,10 @@ def create_schedule_variance_chart(projects):
         yaxis_title='Days (positive = delayed)',
         height=500,
         xaxis={'tickangle': -45},
-        font=dict(size=11),
-        hovermode='x unified'
+        hovermode='x unified',
+        plot_bgcolor='#ffffff',
+        paper_bgcolor='#ffffff',
+        font=dict(color='#1a202c', size=11)
     )
     
     fig.add_hline(y=0, line_dash="dash", line_color="gray", annotation_text="On Time")
@@ -384,7 +764,6 @@ def create_data_completeness_chart(summary):
         completeness.get('partial_data', 0),
         completeness.get('minimal_data', 0)
     ]
-    # Green for complete, Amber for partial, Red for minimal
     colors = ['#10b981', '#f59e0b', '#ef4444']
     
     fig = go.Figure(data=[go.Bar(
@@ -401,8 +780,10 @@ def create_data_completeness_chart(summary):
         xaxis_title='Coverage Level',
         yaxis_title='Number of Projects',
         height=400,
-        font=dict(size=12),
-        hovermode='x unified'
+        hovermode='x unified',
+        plot_bgcolor='#ffffff',
+        paper_bgcolor='#ffffff',
+        font=dict(color='#1a202c', size=12)
     )
     
     return fig
@@ -441,12 +822,12 @@ def create_portfolio_metrics_summary(summary):
                 delta=f"{'Over' if variance_pct < 0 else 'Under'} Budget"
             )
     
-    # Add variance explanation
+    # Add variance explanation with better styling
     st.markdown("""
-    <div class="variance-info">
-        <b>📊 Variance Calculation:</b><br/>
-        Portfolio Variance = ((Total Actual Cost - Total Baseline Budget) / Total Baseline Budget) × 100<br/>
-        <b>Interpretation:</b> Negative % = Over Budget | Positive % = Under Budget
+    <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #bae6fd; border-radius: 8px; padding: 16px; margin-top: 16px; border-left: 4px solid #0284c7;">
+        <p style="margin: 0 0 8px 0; font-weight: 700; color: #0c4a6e;">📊 Variance Calculation</p>
+        <p style="margin: 8px 0; color: #0c4a6e; font-family: monospace; font-size: 12px;">Portfolio Variance = ((Total Actual Cost - Total Baseline Budget) / Total Baseline Budget) × 100</p>
+        <p style="margin: 8px 0; color: #0c4a6e; font-size: 13px;"><strong>Interpretation:</strong> Negative % = Over Budget | Positive % = Under Budget</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -477,16 +858,29 @@ def display_insight_card(insight: dict, projects_map: dict = None):
     metrics = insight.get('metrics', {})
     
     # Enhanced header with gradient background
-    header_html = f'<div style="background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%); padding: 1.5rem; border-radius: 10px; color: white; margin: 0.5rem 0;"><h4 style="margin: 0; color: white;">{icon} {title}</h4></div>'
+    severity_background = {
+        'critical': 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
+        'high': 'linear-gradient(135deg, #ea580c 0%, #b45309 100%)',
+        'warning': 'linear-gradient(135deg, #eab308 0%, #b45309 100%)',
+        'info': 'linear-gradient(135deg, #0284c7 0%, #075985 100%)'
+    }
+    
+    bg_style = severity_background.get(severity, 'linear-gradient(135deg, #6366f1 0%, #7c3aed 100%)')
+    
+    header_html = f'<div style="background: {bg_style}; padding: 1.5rem; border-radius: 10px; color: white; margin: 0.5rem 0; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);"><h4 style="margin: 0; color: white; font-size: 1.3rem; font-weight: 700;">{icon} {title}</h4></div>'
     st.markdown(header_html, unsafe_allow_html=True)
     
+    # Better styled insight details
     st.markdown(f"""
-    <div class="{alert_class}">
-        <p><strong>Category:</strong> <span class="insight-category-badge">{insight['category'].replace('_', ' ').title()}</span></p>
-        <p><strong>Confidence:</strong> <span class="confidence-badge">{confidence}</span></p>
-        <p><strong>Description:</strong> {insight['description']}</p>
-        <p><strong>Impact:</strong> {insight['impact']}</p>
-        <p><strong>Recommendation:</strong> {insight['recommendation']}</p>
+    <div class="insight-box insight-{severity}">
+        <p style="margin: 8px 0;"><strong>📁 Category:</strong> {insight['category'].replace('_', ' ').title()}</p>
+        <p style="margin: 8px 0;"><strong>📊 Confidence:</strong> {confidence}</p>
+        <p style="margin: 12px 0;"><strong>📝 Description:</strong></p>
+        <p style="margin: 8px 0; padding-left: 12px; border-left: 3px solid #6366f1;">{insight['description']}</p>
+        <p style="margin: 12px 0;"><strong>💥 Impact:</strong></p>
+        <p style="margin: 8px 0; padding-left: 12px; border-left: 3px solid #ea580c;">{insight['impact']}</p>
+        <p style="margin: 12px 0;"><strong>✅ Recommendation:</strong></p>
+        <p style="margin: 8px 0; padding-left: 12px; border-left: 3px solid #10b981;">{insight['recommendation']}</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -578,7 +972,13 @@ def display_project_assessment(project_data):
         st.metric("Data Sources", f"{overall.get('data_sources_available', 0)}/3")
     
     if overall.get('summary'):
-        st.info(overall['summary'])
+        st.markdown(f"""
+        <div class="insight-box">
+            <p style="margin: 0; padding: 12px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 8px; border-left: 4px solid #0284c7;">
+                {overall['summary']}
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
     
     baseline = project_data.get('baseline_metrics', {})
     wave = project_data.get('latest_wave_snapshot', {})
@@ -901,18 +1301,23 @@ def main():
             st.info("No insights generated yet. Complete the analysis to see insights.")
         
         if summary.get('top_concerns'):
-            st.markdown("### 🚨 Top Portfolio Concerns")
+            st.markdown('<p class="section-header">🚨 Top Portfolio Concerns</p>', unsafe_allow_html=True)
             for concern in summary['top_concerns']:
-                st.warning(concern)
+                st.markdown(f"""
+                <div class="insight-box insight-warning">
+                    <p style="margin: 0; padding-left: 12px; border-left: 4px solid #ea580c;">{concern}</p>
+                </div>
+                """, unsafe_allow_html=True)
         
         if summary.get('critical_issues'):
-            st.markdown("### ⚠️ Critical Issues Requiring Attention")
+            st.markdown('<p class="section-header">🚨 Critical Issues Requiring Attention</p>', unsafe_allow_html=True)
             for issue in summary['critical_issues']:
                 st.markdown(f"""
-                <div class="alert-critical">
-                    <strong>{issue['project_name']}</strong> ({issue['project_id']})<br/>
-                    {issue['issue']}<br/>
-                    <em>Recommendation: {issue['recommendation']}</em>
+                <div class="insight-box insight-critical" style="border-left: 5px solid #dc2626;">
+                    <p style="margin: 8px 0;"><strong>🎯 {issue['project_name']}</strong></p>
+                    <p style="margin: 8px 0; color: #7f1d1d;">Project ID: <code>{issue['project_id']}</code></p>
+                    <p style="margin: 12px 0; padding: 8px; background: rgba(220, 38, 38, 0.1); border-radius: 4px; border-left: 3px solid #dc2626;">{issue['issue']}</p>
+                    <p style="margin: 8px 0; padding-left: 12px; border-left: 3px solid #10b981;"><strong>✅ Recommendation:</strong> {issue['recommendation']}</p>
                 </div>
                 """, unsafe_allow_html=True)
         
@@ -1030,12 +1435,12 @@ def main():
             risks = summary.get('portfolio_risks', [])
             if risks:
                 for risk in risks:
-                    severity_color = 'critical' if risk['severity'] == 'high' else 'warning'
+                    severity_class = 'insight-critical' if risk['severity'] == 'high' else 'insight-warning'
                     st.markdown(f"""
-                    <div class="alert-{severity_color}">
-                        <strong>{risk['risk'].upper()}</strong><br/>
-                        {risk['description']}<br/>
-                        <em>Impact: {risk['impact']}</em>
+                    <div class="insight-box {severity_class}">
+                        <p style="margin: 8px 0;"><strong>⚠️ {risk['risk'].upper()}</strong></p>
+                        <p style="margin: 8px 0;">{risk['description']}</p>
+                        <p style="margin: 8px 0; padding: 8px; background: rgba(0, 0, 0, 0.05); border-radius: 4px;"><strong>Impact:</strong> {risk['impact']}</p>
                     </div>
                     """, unsafe_allow_html=True)
             else:
