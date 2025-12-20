@@ -43,7 +43,6 @@ def load_custom_css():
         
         /* ==================== GLOBAL ELEMENTS ==================== */
         * {
-            color: #1a202c !important;
             border-color: #e2e8f0 !important;
         }
         
@@ -63,8 +62,18 @@ def load_custom_css():
         }
         
         /* ==================== TEXT ELEMENTS ==================== */
-        p, span, div, label, h1, h2, h3, h4, h5, h6 {
+        p, span, div, label, h1, h2, h3, h5, h6 {
             color: #1a202c !important;
+        }
+        
+        /* h4 excluded - will be controlled by white-header-text class */
+        h4 {
+            color: #1a202c !important;
+        }
+        
+        /* White header class - override h4 color */
+        .white-header-text h4 {
+            color: #ffffff !important;
         }
         
         h1, h2, h3 {
@@ -507,13 +516,32 @@ def load_custom_css():
             color: #0c4a6e !important;
         }
         
-        /* ==================== PLOTLY CHARTS FIX ==================== */
+        /* ==================== PLOTLY CHARTS - FORCE BLACK TEXT ==================== */
         .plotly-graph-div {
             background-color: #ffffff !important;
         }
         
-        .plotly-graph-div svg {
+        .plotly {
             background-color: #ffffff !important;
+        }
+        
+        .plotly-graph-div text {
+            fill: #000000 !important;
+            color: #000000 !important;
+        }
+        
+        svg text {
+            fill: #000000 !important;
+        }
+        
+        /* ==================== FORCE WHITE TEXT ON COLORED HEADERS ==================== */
+        .white-header-text {
+            color: #ffffff !important;
+        }
+        
+        .white-header-text h4 {
+            color: #ffffff !important;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6) !important;
         }
         
         /* ==================== LINKS ==================== */
@@ -526,6 +554,25 @@ def load_custom_css():
         a:hover {
             color: #8b5cf6 !important;
             text-decoration: underline !important;
+        }
+        
+        /* ==================== ULTIMATE WHITE TEXT OVERRIDE ==================== */
+        .white-header-text,
+        .white-header-text * {
+            color: #ffffff !important;
+        }
+        
+        .white-header-text h4,
+        div[class*="white-header"] h4 {
+            color: #ffffff !important;
+            background: transparent !important;
+        }
+        
+        /* Override any inherited dark color on h4 inside white-header-text */
+        .white-header-text h4 {
+            color: #ffffff !important;
+            -webkit-text-fill-color: #ffffff !important;
+            caret-color: #ffffff !important;
         }
         
         /* ==================== RESPONSIVE ==================== */
@@ -568,18 +615,19 @@ def create_status_distribution_chart(summary):
     fig = go.Figure(data=[go.Pie(
         labels=labels,
         values=values,
-        marker=dict(colors=chart_colors),
+        marker=dict(colors=chart_colors, line=dict(color='white', width=2)),
         textinfo='label+percent',
-        textfont_size=14,
+        textposition='auto',
+        textfont=dict(size=14, color='#000000'),
         hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
     )])
     
     fig.update_layout(
         title='Portfolio Status Distribution',
-        height=400,
+        height=500,
         plot_bgcolor='#ffffff',
         paper_bgcolor='#ffffff',
-        font=dict(color='#1a202c', size=12)
+        font=dict(color='#000000', size=14)
     )
     
     return fig
@@ -610,8 +658,10 @@ def create_health_distribution_chart(summary):
         x=df['Health'],
         y=df['Count'],
         marker_color=df['Color'],
+        marker_line=dict(color='white', width=1),
         text=df['Count'],
         textposition='outside',
+        textfont=dict(size=12, color='#000000'),
         hovertemplate='<b>%{x}</b><br>Projects: %{y}<extra></extra>'
     )])
     
@@ -619,11 +669,11 @@ def create_health_distribution_chart(summary):
         title='Health Indicator Distribution',
         xaxis_title='Health Status',
         yaxis_title='Number of Projects',
-        height=400,
+        height=500,
         hovermode='x unified',
         plot_bgcolor='#ffffff',
         paper_bgcolor='#ffffff',
-        font=dict(color='#1a202c', size=12)
+        font=dict(color='#000000', size=12)
     )
     
     return fig
@@ -664,8 +714,10 @@ def create_budget_variance_chart(projects):
         x=df['Project'],
         y=df['Variance %'],
         marker_color=colors,
+        marker_line=dict(color='white', width=1),
         text=df['Variance %'].apply(lambda x: f"{x:.1f}%"),
         textposition='outside',
+        textfont=dict(size=11, color='#000000'),
         customdata=df['Project ID'],
         hovertemplate='<b>%{customdata}</b><br>' +
                       'Project: %{x}<br>' +
@@ -677,12 +729,12 @@ def create_budget_variance_chart(projects):
         title='Budget Variance by Project<br><sub>Negative = Over Budget | Positive = Under Budget</sub>',
         xaxis_title='Projects',
         yaxis_title='Variance % (negative = overrun)',
-        height=500,
+        height=600,
         xaxis={'tickangle': -45},
         hovermode='x unified',
         plot_bgcolor='#ffffff',
         paper_bgcolor='#ffffff',
-        font=dict(color='#1a202c', size=11)
+        font=dict(color='#000000', size=11)
     )
     
     fig.add_hline(y=0, line_dash="dash", line_color="gray", annotation_text="Break Even")
@@ -725,8 +777,10 @@ def create_schedule_variance_chart(projects):
         x=df['Project'],
         y=df['Delay (Days)'],
         marker_color=colors,
+        marker_line=dict(color='white', width=1),
         text=df['Delay (Days)'].apply(lambda x: f"{x:.0f}d"),
         textposition='outside',
+        textfont=dict(size=11, color='#000000'),
         customdata=df['Project ID'],
         hovertemplate='<b>%{customdata}</b><br>' +
                       'Project: %{x}<br>' +
@@ -738,12 +792,12 @@ def create_schedule_variance_chart(projects):
         title='Schedule Variance by Project<br><sub>Positive = Delayed | Negative = Ahead of Schedule</sub>',
         xaxis_title='Projects',
         yaxis_title='Days (positive = delayed)',
-        height=500,
+        height=600,
         xaxis={'tickangle': -45},
         hovermode='x unified',
         plot_bgcolor='#ffffff',
         paper_bgcolor='#ffffff',
-        font=dict(color='#1a202c', size=11)
+        font=dict(color='#000000', size=11)
     )
     
     fig.add_hline(y=0, line_dash="dash", line_color="gray", annotation_text="On Time")
@@ -770,8 +824,10 @@ def create_data_completeness_chart(summary):
         x=labels,
         y=values,
         marker_color=colors,
+        marker_line=dict(color='white', width=1),
         text=values,
         textposition='outside',
+        textfont=dict(size=12, color='#000000'),
         hovertemplate='<b>%{x}</b><br>Projects: %{y}<extra></extra>'
     )])
     
@@ -779,11 +835,11 @@ def create_data_completeness_chart(summary):
         title='Data Source Completeness',
         xaxis_title='Coverage Level',
         yaxis_title='Number of Projects',
-        height=400,
+        height=500,
         hovermode='x unified',
         plot_bgcolor='#ffffff',
         paper_bgcolor='#ffffff',
-        font=dict(color='#1a202c', size=12)
+        font=dict(color='#000000', size=12)
     )
     
     return fig
@@ -822,7 +878,6 @@ def create_portfolio_metrics_summary(summary):
                 delta=f"{'Over' if variance_pct < 0 else 'Under'} Budget"
             )
     
-    # Add variance explanation with better styling
     st.markdown("""
     <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #bae6fd; border-radius: 8px; padding: 16px; margin-top: 16px; border-left: 4px solid #0284c7;">
         <p style="margin: 0 0 8px 0; font-weight: 700; color: #0c4a6e;">📊 Variance Calculation</p>
@@ -857,7 +912,6 @@ def display_insight_card(insight: dict, projects_map: dict = None):
     title = insight['title']
     metrics = insight.get('metrics', {})
     
-    # Enhanced header with gradient background
     severity_background = {
         'critical': 'linear-gradient(135deg, #dc2626 0%, #991b1b 100%)',
         'high': 'linear-gradient(135deg, #ea580c 0%, #b45309 100%)',
@@ -867,26 +921,23 @@ def display_insight_card(insight: dict, projects_map: dict = None):
     
     bg_style = severity_background.get(severity, 'linear-gradient(135deg, #6366f1 0%, #7c3aed 100%)')
     
-    header_html = f'<div style="background: {bg_style}; padding: 1.5rem; border-radius: 10px; color: white; margin: 0.5rem 0; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);"><h4 style="margin: 0; color: white; font-size: 1.3rem; font-weight: 700;">{icon} {title}</h4></div>'
+    header_html = f'<div class="white-header-text" style="background: {bg_style}; padding: 1.5rem; border-radius: 10px; color: #ffffff !important; margin: 0.5rem 0; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);"><h4 style="margin: 0 !important; color: #ffffff !important; font-size: 1.3rem !important; font-weight: 700 !important; text-shadow: 0 2px 4px rgba(0,0,0,0.6) !important; background: transparent !important;">{icon} {title}</h4></div>'
     st.markdown(header_html, unsafe_allow_html=True)
     
-    # Better styled insight details
     st.markdown(f"""
     <div class="insight-box insight-{severity}">
-        <p style="margin: 8px 0;"><strong>📁 Category:</strong> {insight['category'].replace('_', ' ').title()}</p>
-        <p style="margin: 8px 0;"><strong>📊 Confidence:</strong> {confidence}</p>
-        <p style="margin: 12px 0;"><strong>📝 Description:</strong></p>
-        <p style="margin: 8px 0; padding-left: 12px; border-left: 3px solid #6366f1;">{insight['description']}</p>
-        <p style="margin: 12px 0;"><strong>💥 Impact:</strong></p>
-        <p style="margin: 8px 0; padding-left: 12px; border-left: 3px solid #ea580c;">{insight['impact']}</p>
-        <p style="margin: 12px 0;"><strong>✅ Recommendation:</strong></p>
-        <p style="margin: 8px 0; padding-left: 12px; border-left: 3px solid #10b981;">{insight['recommendation']}</p>
+        <p style="margin: 8px 0; color: #1a202c;"><strong>📁 Category:</strong> {insight['category'].replace('_', ' ').title()}</p>
+        <p style="margin: 8px 0; color: #1a202c;"><strong>📊 Confidence:</strong> {confidence}</p>
+        <p style="margin: 12px 0; color: #1a202c;"><strong>📝 Description:</strong></p>
+        <p style="margin: 8px 0; padding-left: 12px; border-left: 3px solid #6366f1; color: #1a202c;">{insight['description']}</p>
+        <p style="margin: 12px 0; color: #1a202c;"><strong>💥 Impact:</strong></p>
+        <p style="margin: 8px 0; padding-left: 12px; border-left: 3px solid #ea580c; color: #1a202c;">{insight['impact']}</p>
+        <p style="margin: 12px 0; color: #1a202c;"><strong>✅ Recommendation:</strong></p>
+        <p style="margin: 8px 0; padding-left: 12px; border-left: 3px solid #10b981; color: #1a202c;">{insight['recommendation']}</p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Display detailed project breakdown if metrics contains project information
     if isinstance(metrics, dict) and projects_map:
-        # Dictionary of all possible project list keys and their display labels
         project_keys = {
             'flagged_projects': '🚩 Flagged Projects',
             'leakage_projects': '💧 Leakage Projects',
@@ -905,23 +956,14 @@ def display_insight_card(insight: dict, projects_map: dict = None):
             'top_contributors': '📊 Top Contributors',
         }
         
-        # Track if we found any projects
-        found_projects = False
-        
-        # Iterate through all possible project keys
         for key, label in project_keys.items():
             if key in metrics and metrics[key]:
-                found_projects = True
                 projects_list = metrics[key]
                 
-                # Handle different data types
                 if isinstance(projects_list, list):
-                    # Check if it's a list of dicts or list of strings
                     if projects_list and isinstance(projects_list[0], dict):
-                        # List of dictionaries (with project_id key)
                         project_ids = [item.get('project_id', item.get('Project ID', item)) for item in projects_list]
                     else:
-                        # List of strings/IDs
                         project_ids = projects_list
                     
                     with st.expander(f"{label} ({len(project_ids)} projects)"):
@@ -974,7 +1016,7 @@ def display_project_assessment(project_data):
     if overall.get('summary'):
         st.markdown(f"""
         <div class="insight-box">
-            <p style="margin: 0; padding: 12px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 8px; border-left: 4px solid #0284c7;">
+            <p style="margin: 0; padding: 12px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 8px; border-left: 4px solid #0284c7; color: #0c4a6e;">
                 {overall['summary']}
             </p>
         </div>
@@ -1087,6 +1129,20 @@ def display_project_assessment(project_data):
                 st.markdown("---")
 
 
+def remove_duplicate_insights(insights):
+    """Remove duplicate insights while preserving order"""
+    seen = set()
+    unique_insights = []
+    
+    for insight in insights:
+        insight_key = (insight.get('title'), insight.get('category'), insight.get('severity'))
+        if insight_key not in seen:
+            seen.add(insight_key)
+            unique_insights.append(insight)
+    
+    return unique_insights
+
+
 def main():
     """Main application"""
     
@@ -1099,7 +1155,6 @@ def main():
     
     load_custom_css()
     
-    # Updated main header with better styling
     st.markdown('<p class="main-header">Enterprise Data Analytics Dashboard</p>', unsafe_allow_html=True)
     st.markdown("**AI-Powered Multi-Source Project Analysis: Smartsheet + Wave + Tick**")
     st.markdown("---")
@@ -1232,7 +1287,6 @@ def main():
         projects = st.session_state['projects']
         engine = st.session_state['engine']
         
-        # Create project name mapping for tooltips
         projects_map = {}
         for project_id, project_data in projects.items():
             metadata = project_data.get('project_metadata', {})
@@ -1271,6 +1325,7 @@ def main():
             
             st.markdown("**All Personas Combined:**")
             insights = exec_insights + vp_insights + mgr_insights
+            insights = remove_duplicate_insights(insights)
         
         if insights:
             categories = list(set([i['category'] for i in insights]))
@@ -1305,7 +1360,7 @@ def main():
             for concern in summary['top_concerns']:
                 st.markdown(f"""
                 <div class="insight-box insight-warning">
-                    <p style="margin: 0; padding-left: 12px; border-left: 4px solid #ea580c;">{concern}</p>
+                    <p style="margin: 0; padding-left: 12px; border-left: 4px solid #ea580c; color: #1a202c;">{concern}</p>
                 </div>
                 """, unsafe_allow_html=True)
         
@@ -1314,10 +1369,10 @@ def main():
             for issue in summary['critical_issues']:
                 st.markdown(f"""
                 <div class="insight-box insight-critical" style="border-left: 5px solid #dc2626;">
-                    <p style="margin: 8px 0;"><strong>🎯 {issue['project_name']}</strong></p>
-                    <p style="margin: 8px 0; color: #7f1d1d;">Project ID: <code>{issue['project_id']}</code></p>
-                    <p style="margin: 12px 0; padding: 8px; background: rgba(220, 38, 38, 0.1); border-radius: 4px; border-left: 3px solid #dc2626;">{issue['issue']}</p>
-                    <p style="margin: 8px 0; padding-left: 12px; border-left: 3px solid #10b981;"><strong>✅ Recommendation:</strong> {issue['recommendation']}</p>
+                    <p style="margin: 8px 0; color: #1a202c;"><strong>🎯 {issue['project_name']}</strong></p>
+                    <p style="margin: 8px 0; color: #1a202c;">Project ID: <code>{issue['project_id']}</code></p>
+                    <p style="margin: 12px 0; padding: 8px; background: rgba(220, 38, 38, 0.1); border-radius: 4px; border-left: 3px solid #dc2626; color: #7f1d1d;">{issue['issue']}</p>
+                    <p style="margin: 8px 0; padding-left: 12px; border-left: 3px solid #10b981; color: #1a202c;"><strong>✅ Recommendation:</strong> {issue['recommendation']}</p>
                 </div>
                 """, unsafe_allow_html=True)
         
@@ -1438,9 +1493,9 @@ def main():
                     severity_class = 'insight-critical' if risk['severity'] == 'high' else 'insight-warning'
                     st.markdown(f"""
                     <div class="insight-box {severity_class}">
-                        <p style="margin: 8px 0;"><strong>⚠️ {risk['risk'].upper()}</strong></p>
-                        <p style="margin: 8px 0;">{risk['description']}</p>
-                        <p style="margin: 8px 0; padding: 8px; background: rgba(0, 0, 0, 0.05); border-radius: 4px;"><strong>Impact:</strong> {risk['impact']}</p>
+                        <p style="margin: 8px 0; color: #1a202c;"><strong>⚠️ {risk['risk'].upper()}</strong></p>
+                        <p style="margin: 8px 0; color: #1a202c;">{risk['description']}</p>
+                        <p style="margin: 8px 0; padding: 8px; background: rgba(0, 0, 0, 0.05); border-radius: 4px; color: #1a202c;"><strong>Impact:</strong> {risk['impact']}</p>
                     </div>
                     """, unsafe_allow_html=True)
             else:
